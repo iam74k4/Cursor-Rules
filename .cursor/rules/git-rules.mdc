@@ -1,0 +1,129 @@
+---
+description: Gitルール
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Git ルール
+
+## 制限事項
+
+-   ユーザーの許可なくコミット・プッシュを行わない
+-   コミット前に必ず動作確認（テスト）を行う
+-   論理的なチェックポイントごとにコミットする
+
+## コミットメッセージ（Conventional Commits）
+
+### フォーマット
+
+```
+<type>: <subject>
+
+<description>
+```
+
+-   `<type>`: 変更の種類
+-   `<subject>`: 簡潔な説明（50 文字以内、英語）
+-   `<description>`: 詳細な説明（任意、日本語可）
+
+### タイプ一覧
+
+-   `feat:` 新機能
+-   `fix:` バグ修正
+-   `docs:` ドキュメント変更
+-   `style:` フォーマット変更
+-   `refactor:` リファクタリング
+-   `perf:` パフォーマンス改善
+-   `test:` テスト追加・修正
+-   `build:` ビルドシステムの変更
+-   `ci:` CI 設定の変更
+-   `chore:` その他の変更
+
+### コミットメッセージ例
+
+```
+feat: add user authentication
+
+- JWT token based authentication
+- Login/logout endpoints
+- Password hashing with bcrypt
+```
+
+```
+fix: resolve null pointer in user service
+
+getUserById() was returning null when user not found.
+Added proper null check and error handling.
+```
+
+```
+refactor: extract validation logic
+
+Moved validation functions to separate utils module
+for better reusability.
+```
+
+## ブランチ命名規則
+
+### プレフィックス
+
+-   `feature/` 新機能開発
+-   `fix/` バグ修正
+-   `hotfix/` 本番環境の緊急修正
+-   `release/` リリース準備
+-   `docs/` ドキュメントのみの変更
+-   `refactor/` リファクタリング
+-   `test/` テスト追加・修正
+-   `chore/` 雑務（依存関係更新など）
+
+### 命名フォーマット
+
+```
+<prefix>/<YYMM>-<category>-<description>
+```
+
+-   `YYMM`: 年月（例: 2412 = 2024 年 12 月）
+-   `category`: 機能カテゴリ（例: discord, steam, api）
+-   `description`: 簡潔な説明
+
+### ブランチ名のルール
+
+-   英語小文字のみ使用
+-   単語の区切りはハイフン（`-`）を使用
+-   簡潔で説明的な名前にする
+-   50 文字以内を推奨
+
+### ブランチ名の例
+
+```
+feature/2412-discord-bot-core
+feature/2412-steam-profile-api
+fix/2412-discord-cooldown-bug
+hotfix/2412-security-patch
+release/1.2.0
+docs/2412-update-readme
+refactor/2412-command-handler
+```
+
+### 保護ブランチ
+
+-   `main` / `master` - 本番環境（直接プッシュ禁止）
+-   `develop` - 開発統合ブランチ（直接プッシュ禁止）
+
+### ブランチ運用
+
+-   作業前に最新の `develop` または `main` から分岐する
+-   1 ブランチ = 1 機能/1 修正の原則
+-   マージ後は速やかにブランチを削除する
+
+### マージフロー
+
+-   `feature/*`, `fix/*` → `develop` にマージ（直接 `main` にマージしない）
+-   `develop` → `main` はリリース時のみ
+-   `hotfix/*` → `main` と `develop` の両方にマージ
+
+```
+feature/* ──→ develop ──→ main
+fix/*     ──→ develop ──→ main
+hotfix/*  ──→ main + develop
+```
