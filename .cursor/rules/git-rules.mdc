@@ -1,9 +1,3 @@
----
-description: Gitルール
-globs: ["**/*"]
-alwaysApply: true
----
-
 # Git ルール
 
 ## 制限事項
@@ -11,6 +5,8 @@ alwaysApply: true
 -   ユーザーの許可なくコミット・プッシュを行わない
 -   コミット前に必ず動作確認（テスト）を行う
 -   論理的なチェックポイントごとにコミットする
+
+---
 
 ## コミットメッセージ（Conventional Commits）
 
@@ -32,42 +28,244 @@ alwaysApply: true
 -   `<subject>`: 簡潔な説明（50 文字以内、英語、必須）
 -   `<description>`: 詳細な説明（任意、英語で記述）
 
-### タイプ一覧
+### コミットタイプ一覧
 
--   `feat:` 新機能
+#### 機能・修正系
+
+-   `feat:` 新機能追加
 -   `fix:` バグ修正
--   `docs:` ドキュメント変更
--   `style:` フォーマット変更
--   `refactor:` リファクタリング
+-   `refactor:` リファクタリング（機能変更なし）
 -   `perf:` パフォーマンス改善
+
+#### ドキュメント・テスト系
+
+-   `docs:` ドキュメント変更
 -   `test:` テスト追加・修正
--   `build:` ビルドシステムの変更
--   `ci:` CI 設定の変更
--   `chore:` その他の変更
 
-### コミットメッセージ例
+#### 設定・インフラ系
 
-```
-feat: add user authentication
+-   `build:` ビルドシステムの変更（依存関係、ビルドスクリプトなど）
+-   `ci:` CI/CD設定の変更（`.github/workflows/`、`.gitlab-ci.yml`など）
+-   `chore:` その他の変更（設定ファイル、ツール設定など）
 
-- JWT token based authentication
-- Login/logout endpoints
-- Password hashing with bcrypt
-```
+#### スタイル系
 
-```
-fix: resolve null pointer in user service
+-   `style:` フォーマット変更（コードの動作に影響しない）
 
-getUserById() was returning null when user not found.
-Added proper null check and error handling.
-```
+---
 
-```
-refactor: extract validation logic
+## プロジェクト規模別の運用
 
-Moved validation functions to separate utils module
-for better reusability.
-```
+### 個人用ツール・小規模プロジェクト
+
+**簡易運用（推奨）:**
+
+-   **`main`ブランチのみ使用**
+-   すべてのコミットを`main`に直接プッシュ
+-   ブランチは作成しない（または最小限）
+-   コミットタイプは通常通り使用（`feat:`, `fix:`, `ci:`, `chore:`など）
+
+**適用例:**
+
+-   個人用スクリプト
+-   学習用プロジェクト
+-   小規模なCLIツール
+-   実験的なプロジェクト
+-   自分だけが使用するツール
+
+**メリット:**
+
+-   運用がシンプル
+-   オーバーヘッドが少ない
+-   迅速な開発が可能
+
+**注意点:**
+
+-   コミットメッセージは引き続きConventional Commitsに従う
+-   大きな変更は複数のコミットに分割する
+-   必要に応じてタグでバージョン管理
+
+### 中規模プロジェクト
+
+**標準運用:**
+
+-   **`main`ブランチ**: 安定版・リリース用
+-   **`develop`ブランチ**: 開発統合ブランチ
+-   **`feature/*`ブランチ**: 新機能開発時のみ使用
+-   小さな修正は`develop`に直接コミット可能
+
+**適用例:**
+
+-   複数人で開発するプロジェクト
+-   定期的にリリースするプロジェクト
+-   本番環境で使用するアプリケーション
+
+### 大規模プロジェクト・チーム開発
+
+**厳密な運用:**
+
+-   完全なGit Flowを採用
+-   すべての変更はブランチ経由
+-   `main`への直接コミットは禁止
+-   コードレビュー必須
+
+**適用例:**
+
+-   エンタープライズアプリケーション
+-   オープンソースプロジェクト
+-   複数チームで開発するプロジェクト
+
+---
+
+## ブランチ戦略とコミットタイプの関係
+
+### 基本原則
+
+-   **`main`ブランチ**: 本番環境用、直接コミットは最小限に（個人用ツールは例外）
+-   **`develop`ブランチ**: 開発統合ブランチ、通常の開発作業はここで実施
+-   **`feature/*`ブランチ**: 新機能開発
+-   **`fix/*`ブランチ**: バグ修正
+-   **`hotfix/*`ブランチ**: 本番環境の緊急修正
+
+### ブランチ別のコミットタイプ使用ルール
+
+#### `main`ブランチへの直接コミット
+
+**許容されるケース（最小限）:**
+
+1.  **`ci:`** - CI/CD設定の緊急修正（ワークフローが動かない場合など）
+2.  **`hotfix:`** - 本番環境の緊急修正（セキュリティパッチなど）
+3.  **`chore:`** - 設定ファイルの緊急修正（`.gitignore`、依存関係の緊急更新など）
+
+**推奨される運用:**
+
+-   基本的に`main`への直接コミットは避ける
+-   `ci:`、`hotfix:`、`chore:`も可能であれば`develop`経由で実施
+-   緊急度が高い場合のみ`main`に直接コミット
+
+#### `develop`ブランチでのコミット
+
+**すべてのコミットタイプが使用可能:**
+
+-   `feat:` - 新機能開発
+-   `fix:` - バグ修正
+-   `refactor:` - リファクタリング
+-   `perf:` - パフォーマンス改善
+-   `docs:` - ドキュメント更新
+-   `test:` - テスト追加・修正
+-   `build:` - ビルドシステムの変更
+-   `ci:` - CI/CD設定の変更
+-   `chore:` - その他の変更
+-   `style:` - フォーマット変更
+
+#### `feature/*`ブランチでのコミット
+
+**主に使用するタイプ:**
+
+-   `feat:` - 新機能の実装
+-   `fix:` - 機能開発中のバグ修正
+-   `refactor:` - 機能開発中のリファクタリング
+-   `test:` - 機能のテスト追加
+-   `docs:` - 機能のドキュメント追加
+
+#### `fix/*`ブランチでのコミット
+
+**主に使用するタイプ:**
+
+-   `fix:` - バグ修正
+-   `test:` - バグ修正のテスト追加
+-   `docs:` - バグ修正のドキュメント更新
+
+#### `hotfix/*`ブランチでのコミット
+
+**主に使用するタイプ:**
+
+-   `hotfix:` - 本番環境の緊急修正（非標準だが、プロジェクトで定義可能）
+-   `fix:` - 緊急バグ修正
+-   `test:` - 緊急修正のテスト追加
+
+**注意:** `hotfix:`はConventional Commitsの標準タイプではない。通常は`fix:`を使用し、ブランチ名で`hotfix/*`とすることで区別する。
+
+---
+
+## コミットタイプの選択ガイド
+
+### 判断フローチャート
+
+1.  **新機能を追加したか？**
+    -   Yes → `feat:`
+    -   No → 次へ
+
+2.  **バグを修正したか？**
+    -   Yes → `fix:`
+    -   No → 次へ
+
+3.  **コードを改善したが機能変更はないか？**
+    -   Yes → `refactor:`
+    -   No → 次へ
+
+4.  **パフォーマンスを改善したか？**
+    -   Yes → `perf:`
+    -   No → 次へ
+
+5.  **ドキュメントを変更したか？**
+    -   Yes → `docs:`
+    -   No → 次へ
+
+6.  **テストを追加・修正したか？**
+    -   Yes → `test:`
+    -   No → 次へ
+
+7.  **ビルドシステムを変更したか？**
+    -   Yes → `build:`
+    -   No → 次へ
+
+8.  **CI/CD設定を変更したか？**
+    -   Yes → `ci:`
+    -   No → 次へ
+
+9.  **フォーマットのみ変更したか？**
+    -   Yes → `style:`
+    -   No → 次へ
+
+10. **その他の変更か？**
+    -   Yes → `chore:`
+
+### 具体例
+
+#### `ci:`を使用するケース
+
+-   `.github/workflows/*.yml`の修正
+-   `.gitlab-ci.yml`の修正
+-   CI設定ファイルの追加・変更
+-   ワークフローの構文エラー修正
+-   CI/CDパイプラインの改善
+
+#### `build:`を使用するケース
+
+-   `package.json`、`requirements.txt`、`Cargo.toml`などの依存関係変更
+-   ビルドスクリプト（`Makefile`、`build.sh`など）の変更
+-   ビルドツールの設定変更
+
+#### `chore:`を使用するケース
+
+-   `.gitignore`の変更
+-   プロジェクト設定ファイルの変更
+-   ツール設定の変更
+-   依存関係の更新（機能追加・修正ではない場合）
+
+#### `fix:`と`ci:`の使い分け
+
+-   **`fix:`**: アプリケーションコードのバグ修正
+-   **`ci:`**: CI/CD設定ファイルの修正（ワークフローの構文エラー、設定ミスなど）
+
+#### `main`ブランチでの`ci:`使用
+
+-   ワークフローファイルの構文エラー修正（緊急）
+-   CI設定の不具合でビルドが失敗している場合
+-   可能であれば`develop`経由で実施、緊急時のみ`main`に直接コミット
+
+---
 
 ## ブランチ命名規則
 
@@ -109,6 +307,8 @@ hotfix/2412-security-patch
 release/1.2.0
 docs/2412-update-readme
 refactor/2412-command-handler
+ci/2412-fix-workflow-syntax
+chore/2412-update-dependencies
 ```
 
 ### 保護ブランチ
@@ -133,3 +333,104 @@ feature/* ──→ develop ──→ main
 fix/*     ──→ develop ──→ main
 hotfix/*  ──→ main + develop
 ```
+
+---
+
+## コミットメッセージ例
+
+### 機能追加
+
+```
+feat: add user authentication
+
+- JWT token based authentication
+- Login/logout endpoints
+- Password hashing with bcrypt
+```
+
+### バグ修正
+
+```
+fix: resolve null pointer in user service
+
+getUserById() was returning null when user not found.
+Added proper null check and error handling.
+```
+
+### リファクタリング
+
+```
+refactor: extract validation logic
+
+Moved validation functions to separate utils module
+for better reusability.
+```
+
+### CI設定の変更
+
+```
+ci: fix workflow syntax error
+
+Merged duplicate version extraction steps to resolve
+duplicate identifier error in GitHub Actions workflow.
+```
+
+### ビルドシステムの変更
+
+```
+build: update Python dependencies
+
+- Updated requests to 2.31.0
+- Added pytest for testing
+- Removed unused dependencies
+```
+
+### ドキュメント更新
+
+```
+docs: update installation guide
+
+Added Windows-specific installation steps and
+troubleshooting section.
+```
+
+### ホットフィックス（緊急修正）
+
+```
+fix: patch security vulnerability in auth middleware
+
+Critical security fix for token validation bypass.
+Applied to both main and develop branches.
+```
+
+---
+
+## まとめ
+
+### 重要なポイント
+
+1.  **プロジェクト規模に応じた運用を選択**
+   -   個人用ツール・小規模: `main`ブランチのみ、直接コミットOK
+   -   中規模: `main`と`develop`、必要に応じてブランチ作成
+   -   大規模・チーム開発: 完全なGit Flow、ブランチ必須
+
+2.  **`main`ブランチへの直接コミット**
+   -   個人用ツール: すべてのコミットタイプで直接コミット可能
+   -   中規模以上: `ci:`、`hotfix:`、`chore:`の緊急時のみ
+   -   可能であれば`develop`経由で実施
+
+3.  **コミットタイプは変更内容に基づいて選択**
+   -   アプリケーションコードの修正 → `fix:`
+   -   CI/CD設定の修正 → `ci:`
+   -   ビルドシステムの変更 → `build:`
+   -   その他の設定変更 → `chore:`
+
+4.  **ブランチ戦略を遵守（中規模以上）**
+   -   `feature/*`, `fix/*` → `develop`経由
+   -   `hotfix/*` → `main`と`develop`の両方
+   -   `develop` → `main`はリリース時のみ
+
+5.  **コミットメッセージは英語で記述**
+   -   タイプ、件名、説明すべて英語
+   -   簡潔で説明的なメッセージを心がける
+   -   プロジェクト規模に関わらずConventional Commitsに従う
