@@ -8,7 +8,8 @@
 .cursor/
 └── rules/
     ├── git-rules.mdc      # Gitルール
-    └── coding-rules.mdc   # コーディングルール
+    ├── coding-rules.mdc   # コーディングルール
+    └── readme-rules.mdc   # READMEルール
 ```
 
 ## ルール概要
@@ -17,6 +18,7 @@
 |----------|------|
 | `git-rules.mdc` | コミットメッセージ、ブランチ命名 |
 | `coding-rules.mdc` | コード品質、ターミナル、言語設定 |
+| `readme-rules.mdc` | README構造、Shields.ioバッジ、マークダウン記法 |
 
 ## 使い方
 
@@ -49,3 +51,9 @@ chore: メンテナンス
 
 ### ターミナル（PowerShell）
 - `&&`は使用不可、`;`か分割で対応
+
+### README
+- 必須セクション: バッジ、概要、インストール、使い方、ライセンス
+- Shields.ioバッジをタイトル直下に配置
+- コードブロックには言語指定を必須
+- 画像にはaltテキストを設定

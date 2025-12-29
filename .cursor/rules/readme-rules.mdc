@@ -1,0 +1,276 @@
+---
+description: READMEルール
+globs: ["**/README.md", "**/readme.md"]
+alwaysApply: true
+---
+
+# README ルール
+
+## 基本構造とセクション構成
+
+### 必須セクション
+
+以下のセクションはすべてのREADMEに含める：
+
+1.  **バッジ（Shields.io）** - タイトル直下に配置
+2.  **概要・説明** - プロジェクトの目的と特徴
+3.  **インストール手順** - セットアップ方法
+4.  **使い方・クイックスタート** - 基本的な使用方法
+5.  **ライセンス情報** - ライセンスの明記
+
+### 推奨セクション
+
+プロジェクトに応じて以下のセクションを追加：
+
+-   目次（長いREADMEの場合、バッジの後に配置）
+-   機能・特徴
+-   使用例とコードサンプル
+-   設定・設定ファイル
+-   トラブルシューティング
+-   コントリビューションガイドライン
+-   プロジェクト構造
+
+### セクションの階層構造
+
+-   H1 (`#`): タイトルのみ（README.mdファイル名と一致）
+-   H2 (`##`): 主要セクション（必須・推奨セクション）
+-   H3 (`###`): サブセクション（詳細説明）
+-   H4以降は可能な限り避ける（深すぎる階層は読みにくい）
+
+### プロジェクトタイプ別の推奨構成
+
+-   **ライブラリ**: APIドキュメント、インストール方法（npm, pip, etc.）、基本的な使用例、高度な使用例、APIリファレンスへのリンク
+-   **アプリケーション**: インストール手順を詳細に、設定方法、スクリーンショットやデモ画像、使い方の詳細、トラブルシューティング
+-   **CLIツール**: インストール方法、コマンド例を豊富に、オプションの説明、使用例と出力例、設定ファイルの説明
+
+---
+
+## Shields.ioバッジ
+
+### 配置場所
+
+-   タイトル直下、左揃えで配置
+-   バッジは改行で区切って複数行に配置可能
+
+### よく使われるバッジの種類
+
+-   **ビルドステータス**: `![Build Status](https://img.shields.io/github/workflow/status/username/repo/CI?style=flat-square)`
+-   **コードカバレッジ**: `![Coverage](https://img.shields.io/codecov/c/github/username/repo?style=flat-square)`
+-   **バージョン情報**: `![Version](https://img.shields.io/npm/v/package-name?style=flat-square)`
+-   **ライセンス**: `![License](https://img.shields.io/github/license/username/repo?style=flat-square)`
+-   **ダウンロード数**: `![Downloads](https://img.shields.io/npm/dm/package-name?style=flat-square)`
+-   **依存関係の状態**: `![Dependencies](https://img.shields.io/david/username/repo?style=flat-square)`
+
+### バッジの順序
+
+重要度順に配置：
+
+1.  ビルドステータス（プロジェクトの状態を示す）
+2.  バージョン情報（最新版を示す）
+3.  ライセンス（利用条件を示す）
+4.  その他（カバレッジ、ダウンロード数など）
+
+### カスタムバッジの作成方法
+
+Shields.io URL形式：
+
+```
+https://img.shields.io/badge/<LABEL>-<MESSAGE>-<COLOR>?style=<STYLE>
+```
+
+例：
+
+```markdown
+![Custom Badge](https://img.shields.io/badge/status-active-success?style=flat-square)
+```
+
+---
+
+## README記法
+
+### コードブロック
+
+-   必ず言語を指定してシンタックスハイライトを有効化
+-   インラインコード（`` `code` ``）: 単語や短いコード片
+-   コードブロック（``` ``` ```）: 複数行のコード、コマンド、設定例
+-   適切な言語タグを使用（`javascript`, `python`, `bash`, `json`, `yaml`, etc.）
+
+```markdown
+# NG
+```
+code here
+```
+
+# OK
+```javascript
+const example = "code here";
+```
+```
+
+### リンクとナビゲーション
+
+-   リポジトリ内のファイルへのリンクは相対パスを使用
+-   外部リンクは絶対パス（URL）を使用
+-   長いREADMEではセクションへのアンカーリンクを使用
+-   リンク切れを定期的にチェック
+
+```markdown
+# 相対パス（リポジトリ内）
+[Contributing Guide](./CONTRIBUTING.md)
+
+# アンカーリンク
+- [インストール](#インストール)
+- [使い方](#使い方)
+```
+
+### 表の使い方
+
+-   ヘッダー行を明確に
+-   セル内のテキストは簡潔に
+-   数値は右揃えにすると読みやすい（`:---:` で中央、`---:` で右揃え）
+
+```markdown
+| 機能 | 説明 | ステータス |
+|------|------|-----------|
+| 認証 | ユーザー認証機能 | ✅ 実装済み |
+```
+
+### リストの使い方
+
+-   順序付きリスト（`1.`）: 手順や優先順位がある場合
+-   順序なしリスト（`-`）: 項目の列挙
+-   インデントで階層を表現（2スペースまたは4スペースで統一）
+
+### 画像の使い方
+
+-   すべての画像に適切なaltテキストを設定（アクセシビリティ）
+-   画像は適切なサイズにリサイズ
+-   ファイル名は説明的に（`screenshot-main.png` など）
+
+```markdown
+# NG
+![image](./screenshot.png)
+
+# OK
+![Application Screenshot](./screenshot.png)
+```
+
+---
+
+## コード例とサンプル
+
+### インストール手順
+
+-   各ステップを明確に番号付け
+-   Windows、macOS、Linuxそれぞれの手順を明記（必要に応じて）
+-   必要なソフトウェアやバージョンを明記
+-   よくある問題と解決策を記載
+
+例：
+
+```markdown
+## インストール
+
+1. リポジトリをクローン
+   ```bash
+   git clone https://github.com/username/repo.git
+   cd repo
+   ```
+
+2. 依存関係をインストール
+   ```bash
+   npm install
+   ```
+```
+
+### 使用例の提示方法
+
+-   最小限のコードで動作を確認できる例
+-   より複雑な使用ケースも提示
+-   コマンドの説明とオプションの説明を含める
+
+例：
+
+```markdown
+## 基本的な使い方
+
+```javascript
+import { MyLibrary } from 'my-library';
+
+const instance = new MyLibrary();
+instance.doSomething();
+```
+```
+
+---
+
+## 保守性と管理
+
+### バージョン情報の管理方法
+
+-   バージョン番号はShields.ioバッジで自動表示
+-   重要な変更はCHANGELOGに記載
+-   セマンティックバージョニングに従う
+
+### リンク切れの防止
+
+-   定期的にリンクをチェック
+-   外部リンクは信頼性の高いサイトを使用
+-   リポジトリ内のリンクは相対パスを使用
+
+### 定期的な更新の重要性
+
+-   プロジェクトの変更に合わせてREADMEを更新
+-   古い情報は削除または更新
+-   機能追加時はREADMEにも反映
+
+### 変更履歴の管理（CHANGELOGとの連携）
+
+-   CHANGELOG.mdファイルを維持
+-   READMEからCHANGELOGへのリンクを追加
+-   重要な変更はREADMEの「更新履歴」セクションにも記載
+
+---
+
+## 多言語対応
+
+### 言語設定
+
+言語設定については `coding-rules.mdc` を参照してください。
+
+-   ユーザーへの応答は日本語で行う
+-   コードとコメントは英語で記述する
+
+### 多言語READMEの管理方法
+
+-   メインのREADMEは英語（`README.md`）
+-   日本語版は `README.ja.md` として管理
+-   その他の言語も同様に（`README.fr.md`, `README.es.md` など）
+-   バッジの下に言語切り替えリンクを配置
+
+例：
+
+```markdown
+# Project Name
+
+![Build Status](https://img.shields.io/...)
+
+[English](./README.md) | [日本語](./README.ja.md) | [Français](./README.fr.md)
+```
+
+---
+
+## その他のベストプラクティス
+
+### 一貫性のある命名規則
+
+-   セクション名は統一された形式を使用
+-   英語の場合は大文字小文字を統一（例: "Installation", "Usage", "License"）
+-   日本語の場合は適切な表記を使用（例: "インストール", "使い方", "ライセンス"）
+
+### アクセシビリティの考慮
+
+-   altテキストをすべての画像に設定
+-   適切な見出し階層を使用（H1 → H2 → H3の順序）
+-   色だけで情報を伝えない（色覚多様性への配慮）
+-   リンクテキストは説明的に（"ここをクリック"ではなく"インストール手順を参照"）
