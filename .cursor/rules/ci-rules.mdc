@@ -1,0 +1,227 @@
+---
+description: CI/CDルール
+globs: ["**/.github/workflows/*.yml", "**/.github/workflows/*.yaml"]
+alwaysApply: true
+---
+
+# CI/CD ルール
+
+## GitHub Actionsの基本
+
+### ワークフローファイルの配置
+
+-   ワークフローファイルは `.github/workflows/` ディレクトリに配置
+-   ファイル名は `-` で区切る（例: `build-and-release.yml`）
+-   拡張子は `.yml` または `.yaml`（`.yml` を推奨）
+
+### ワークフローの命名規則
+
+-   目的が明確な名前を使用（例: `build.yml`, `test.yml`, `release.yml`）
+-   複数の目的がある場合は `-` で区切る（例: `build-and-test.yml`）
+-   小文字とハイフンのみ使用
+
+### トリガーの設定
+
+-   `push`: ブランチへのpushで実行
+-   `pull_request`: プルリクエストで実行
+-   `workflow_dispatch`: 手動実行
+-   `release`: リリース作成時
+-   `tags`: タグプッシュ時（リリース用）
+
+例：
+
+```yaml
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+```
+
+---
+
+## ビルドとリリースのベストプラクティス
+
+### タグベースのリリース
+
+-   リリースはタグで管理（例: `v1.0.0`）
+-   タグはセマンティックバージョニングに従う
+-   タグプッシュ時に自動でビルド・リリース
+
+```yaml
+on:
+  push:
+    tags:
+      - 'v*'  # vで始まるタグ
+```
+
+### ブランチベースのビルド
+
+-   `main` / `develop` ブランチへのpushでビルド
+-   プルリクエストでテスト実行
+-   本番リリースはタグのみ
+
+### 成果物の管理
+
+-   ビルド成果物は `actions/upload-artifact` で保存
+-   リリース時は `softprops/action-gh-release` でGitHub Releasesにアップロード
+-   成果物には適切な名前を付ける（例: `app-windows-amd64.exe`）
+
+---
+
+## セキュリティ
+
+### GITHUB_TOKENの使い方
+
+-   `GITHUB_TOKEN` は自動で提供される（設定不要）
+-   Releasesへのアップロードには `GITHUB_TOKEN` を使用
+-   権限は最小限に（`permissions` で制限）
+
+```yaml
+permissions:
+  contents: write  # Releasesにアップロードする場合のみ
+```
+
+### シークレットの管理
+
+-   機密情報は GitHub Secrets に保存
+-   ワークフローファイルに直接記載しない
+-   `${{ secrets.SECRET_NAME }}` で参照
+
+### 権限の最小化
+
+-   必要な権限のみを指定
+-   デフォルトの権限設定を確認
+-   不要な権限は削除
+
+---
+
+## パフォーマンス
+
+### キャッシュの活用
+
+-   依存関係のキャッシュを使用（`actions/cache`）
+-   ビルドツールのキャッシュを活用
+-   キャッシュキーは適切に設定
+
+```yaml
+- uses: actions/cache@v3
+  with:
+    path: ~/.cargo
+    key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+```
+
+### 並列ビルド
+
+-   複数OS/アーキテクチャのビルドは `matrix` で並列実行
+-   テストとビルドを分離して並列実行
+-   不要なジョブはスキップ
+
+```yaml
+strategy:
+  matrix:
+    os: [windows-latest, macos-latest, ubuntu-latest]
+```
+
+### 条件付き実行
+
+-   変更されたファイルに応じてジョブをスキップ
+-   パスのフィルタリングを使用
+-   不要なビルドを避ける
+
+```yaml
+- name: Check if build is needed
+  uses: dorny/paths-filter@v2
+  id: changes
+  with:
+    filters: |
+      src:
+        - 'src/**'
+```
+
+---
+
+## ワークフローの構造
+
+### ジョブの分離
+
+-   テスト、ビルド、リリースを別ジョブに分離
+-   ジョブ間の依存関係を明確に（`needs` を使用）
+-   失敗時の動作を設定（`if` で条件分岐）
+
+### エラーハンドリング
+
+-   エラー時は適切なメッセージを表示
+-   重要なステップは `continue-on-error: false` を明示
+-   ログを確認しやすいように構造化
+
+### 通知
+
+-   ビルド失敗時は通知を送信（オプション）
+-   成功時も通知する場合は設定可能にする
+-   通知は最小限に（重要度の高いもののみ）
+
+---
+
+## バージョン管理のベストプラクティス
+
+### セマンティックバージョニング
+
+-   `MAJOR.MINOR.PATCH` 形式（例: `1.2.3`）
+-   `MAJOR`: 互換性のない変更
+-   `MINOR`: 後方互換性のある新機能
+-   `PATCH`: 後方互換性のあるバグ修正
+
+### タグからのバージョン抽出
+
+-   タグからバージョン番号を自動抽出（例: `v1.0.0` → `1.0.0`）
+-   タグ名から `v` プレフィックスを除去
+-   バージョン番号を環境変数として設定
+-   ビルド時にバージョン情報を埋め込む
+-   リリース名とタグ名を一致させる
+
+例：タグからバージョンを抽出
+
+```yaml
+- name: Extract version from tag
+  id: version
+  run: |
+    VERSION=${GITHUB_REF#refs/tags/v}
+    echo "version=$VERSION" >> $GITHUB_OUTPUT
+  shell: bash
+```
+
+例：ビルド時にバージョンを埋め込む
+
+```yaml
+- name: Build with version
+  run: |
+    go build -ldflags "-X main.Version=${{ steps.version.outputs.version }}" -o app.exe
+```
+
+例：リリース名にバージョンを使用
+
+```yaml
+- name: Create Release
+  uses: softprops/action-gh-release@v1
+  with:
+    tag_name: ${{ github.ref_name }}
+    name: Release ${{ steps.version.outputs.version }}
+    files: app.exe
+```
+
+### 言語別のバージョン埋め込み
+
+-   **Go**: `-ldflags "-X main.Version=$VERSION"`
+-   **Rust**: `--cfg version="$VERSION"` または環境変数
+-   **C#**: `AssemblyVersion` 属性またはビルド引数
+-   **Node.js**: `package.json` の `version` フィールドを更新
+
+### バージョン情報の表示
+
+-   ビルド成果物にバージョン情報を含める
+-   `--version` フラグでバージョンを表示できるようにする
+-   リリースノートにバージョン番号を明記

@@ -6,10 +6,13 @@
 
 ```
 .cursor/
-└── rules/
-    ├── git-rules.mdc      # Gitルール
-    ├── coding-rules.mdc   # コーディングルール
-    └── readme-rules.mdc   # READMEルール
+├── rules/
+│   ├── git-rules.mdc      # Gitルール
+│   ├── coding-rules.mdc   # コーディングルール
+│   ├── readme-rules.mdc   # READMEルール
+│   └── ci-rules.mdc       # CI/CDルール
+└── commands/
+    └── github-build.md    # GitHub Actionsワークフロー生成
 ```
 
 ## ルール概要
@@ -19,6 +22,7 @@
 | `git-rules.mdc` | コミットメッセージ、ブランチ命名 |
 | `coding-rules.mdc` | コード品質、ターミナル、言語設定 |
 | `readme-rules.mdc` | README構造、Shields.ioバッジ、マークダウン記法 |
+| `ci-rules.mdc` | GitHub Actions、CI/CDベストプラクティス |
 
 ## 使い方
 
@@ -57,3 +61,10 @@ chore: メンテナンス
 - Shields.ioバッジをタイトル直下に配置
 - コードブロックには言語指定を必須
 - 画像にはaltテキストを設定
+
+### CI/CD
+- ワークフローファイルは `.github/workflows/` に配置
+- タグベースのリリースを推奨
+- バージョン管理: セマンティックバージョニング、タグから自動抽出
+- セキュリティ: GITHUB_TOKENの適切な使用、権限の最小化
+- パフォーマンス: キャッシュの活用、並列ビルド
