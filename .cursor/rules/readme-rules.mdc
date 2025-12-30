@@ -8,6 +8,12 @@ alwaysApply: true
 
 ## 基本構造とセクション構成
 
+### 言語設定
+
+-   **README.mdは英語表記とすること**
+-   日本語版が必要な場合は `README.ja.md` として別ファイルで管理
+-   その他の言語も同様に（`README.fr.md`, `README.es.md` など）
+
 ### 必須セクション
 
 以下のセクションはすべてのREADMEに含める：
@@ -243,7 +249,7 @@ instance.doSomething();
 
 ### 多言語READMEの管理方法
 
--   メインのREADMEは英語（`README.md`）
+-   **メインのREADMEは英語（`README.md`）で記述すること**
 -   日本語版は `README.ja.md` として管理
 -   その他の言語も同様に（`README.fr.md`, `README.es.md` など）
 -   バッジの下に言語切り替えリンクを配置
