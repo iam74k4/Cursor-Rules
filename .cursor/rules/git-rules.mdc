@@ -403,6 +403,49 @@ Critical security fix for token validation bypass.
 Applied to both main and develop branches.
 ```
 
+### リリース時のコミットメッセージ
+
+リリース時は、バージョン番号を含む統一されたフォーマットを使用する。
+
+**フォーマット:**
+
+```
+release: v<version>
+
+<description>
+
+- <change 1>
+- <change 2>
+- <change 3>
+```
+
+**例:**
+
+```
+release: v1.0.0
+
+Initial release with full Cursor-Rules compliance and GitHub Pages support.
+
+- Add LICENSE file (MIT)
+- Add CHANGELOG.md for tracking changes
+- Convert README.md to English and create README.ja.md
+- Translate all code comments and UI text from Japanese to English
+- Add environment variable support for basePath configuration
+- Add build scripts for dynamic generation of manifest.json, robots.txt, and sitemap.xml
+- Update CI/CD workflows with permissions and environment variables
+- Add trailingSlash configuration for GitHub Pages
+- Update HTML lang attribute and OpenGraph locale to English
+- Optimize badge order in README (add build status badge)
+```
+
+**注意事項:**
+
+- リリースコミットは`main`ブランチに直接作成する
+- バージョン番号はセマンティックバージョニングに従う（例: v1.0.0, v1.1.0, v2.0.0）
+- 変更内容は箇条書きで明確に記載する
+- リリースコミットと同時にタグ（`v<version>`）を作成する
+- リリースコミットは1つのコミットにまとめる（複数のコミットを統合）
+
 ---
 
 ## まとめ
