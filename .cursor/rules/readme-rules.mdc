@@ -215,8 +215,8 @@ instance.doSomething();
 ### バージョン情報の管理方法
 
 -   バージョン番号はShields.ioバッジで自動表示
--   重要な変更はCHANGELOGに記載
 -   セマンティックバージョニングに従う
+-   CHANGELOGは任意（大規模プロジェクトやライブラリで推奨）
 
 ### リンク切れの防止
 
@@ -230,11 +230,11 @@ instance.doSomething();
 -   古い情報は削除または更新
 -   機能追加時はREADMEにも反映
 
-### 変更履歴の管理（CHANGELOGとの連携）
+### 変更履歴の管理（オプション）
 
--   CHANGELOG.mdファイルを維持
--   READMEからCHANGELOGへのリンクを追加
--   重要な変更はREADMEの「更新履歴」セクションにも記載
+-   CHANGELOG.mdファイルは任意（大規模プロジェクトやライブラリで推奨）
+-   CHANGELOGを使用する場合は、READMEからCHANGELOGへのリンクを追加
+-   重要な変更はREADMEの「更新履歴」セクションにも記載可能
 
 ---
 
