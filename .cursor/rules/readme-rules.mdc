@@ -29,6 +29,7 @@ alwaysApply: true
 プロジェクトに応じて以下のセクションを追加：
 
 -   目次（長いREADMEの場合、バッジの後に配置）
+-   技術スタック
 -   機能・特徴
 -   使用例とコードサンプル
 -   設定・設定ファイル
@@ -89,6 +90,94 @@ https://img.shields.io/badge/<LABEL>-<MESSAGE>-<COLOR>?style=<STYLE>
 ```markdown
 ![Custom Badge](https://img.shields.io/badge/status-active-success?style=flat-square)
 ```
+
+---
+
+## 技術スタック
+
+### 配置場所
+
+-   「概要・説明」の後、「インストール手順」の前に配置することを推奨
+-   プロジェクトの技術的な背景を理解するために重要な情報
+
+### 記載内容
+
+以下の情報を含める：
+
+-   **プログラミング言語**: 使用している主要な言語（例: TypeScript, Python, Rust）
+-   **フレームワーク・ライブラリ**: 主要なフレームワークやライブラリ（例: React, Next.js, Express）
+-   **データベース**: 使用しているデータベース（例: PostgreSQL, MongoDB, SQLite）
+-   **ツール・サービス**: 開発・デプロイに使用するツール（例: Docker, GitHub Actions, Vercel）
+-   **その他**: その他の重要な技術やサービス
+
+### 記載形式
+
+#### 方法1: リスト形式（シンプル）
+
+```markdown
+## Tech Stack
+
+- **Language**: TypeScript
+- **Framework**: Next.js 14
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL
+- **Deployment**: Vercel
+```
+
+#### 方法2: バッジ形式（視覚的）
+
+```markdown
+## Tech Stack
+
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+```
+
+#### 方法3: 表形式（整理された情報）
+
+```markdown
+## Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Language | TypeScript |
+| Framework | Next.js 14 |
+| Styling | Tailwind CSS |
+| Database | PostgreSQL |
+| Deployment | Vercel |
+```
+
+#### 方法4: カテゴリ別セクション（詳細な説明）
+
+```markdown
+## Tech Stack
+
+### Frontend
+- Next.js 14
+- React 18
+- TypeScript
+- Tailwind CSS
+
+### Backend
+- Node.js
+- Express
+- PostgreSQL
+
+### DevOps
+- Docker
+- GitHub Actions
+- Vercel
+```
+
+### ベストプラクティス
+
+-   主要な技術のみを記載（すべての依存関係を列挙しない）
+-   バージョン番号は重要な場合のみ記載（例: Next.js 14）
+-   バッジを使用する場合は、Shields.ioの公式バッジまたはカスタムバッジを使用
+-   プロジェクトの規模に応じて記載形式を選択（小規模: リスト形式、大規模: カテゴリ別セクション）
+-   技術スタックが変更された場合はREADMEも更新する
 
 ---
 
